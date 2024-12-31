@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Add/Update</title>
+</head>
+<body>
+
+    <input type="text" id="input1" placeholder="Name">
+    <input type="text" id="input2" placeholder="Type">
+    <input type="text" id="input3" placeholder="Price">
+    <button id="button">Add</button>
+
+    <table border="1">
+        <thead id="thead">
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+<script>
+let input1 = document.getElementById("input1");
+let input2 = document.getElementById("input2");
+let input3 = document.getElementById("input3");
+let addButton = document.getElementById("button");
+let tbody = document.getElementById("tbody");
+
+let currentRowIndex = -1;
+
+// Add or Update Row
+const addToTable = () => {
+    let var1 = input1.value;
+    let var2 = input2.value;
+    let var3 = input3.value;
+
+    
+
+    if (currentRowIndex === -1) {
+        // Create New Row
+        let newRow = tbody.insertRow();
+        insertRowCells(newRow, var1, var2, var3);
+    } else {
+        // Update Existing Row
+        let row = tbody.rows[currentRowIndex];
+        row.cells[0].textContent = var1;
+        row.cells[1].textContent = var2;
+        row.cells[2].textContent = var3;
+        addButton.textContent="add";
+    }
+    resetForm();
+// Reset after update
+};
+
+// Insert Cells and Action Button
+const insertRowCells = (row, var1, var2, var3) => {
+    row.insertCell(0).textContent = var1;
+    row.insertCell(1).textContent = var2;
+    row.insertCell(2).textContent = var3;
+    let actionCell = row.insertCell(3);
+    actionCell.innerHTML = `<button type="button" onclick="editRow(${row.rowIndex})">Update</button>`;
+};
+
+// Edit Row - Pre-fills form
+const editRow = (index) => {
+    addButton.textContent="update";
+    let row = tbody.rows[index - 1];  // tbody.rows is 0-based
+    input1.value = row.cells[0].textContent;
+    input2.value = row.cells[1].textContent;
+    input3.value = row.cells[2].textContent;
+    currentRowIndex = index - 1;  // Store the row index
+};
+
+// Reset Form and Index
+const resetForm = () => {
+    input1.value = "";
+    input2.value = "";
+    input3.value = "";
+    currentRowIndex = -1;
+};
+
+// Button Event Listener
+addButton.addEventListener("click", addToTable);
+</script>
+
+</body>
+</html>
